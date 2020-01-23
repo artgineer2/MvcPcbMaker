@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  mvcpcbmaker:
+    build: ./Application
+    image: mvcpcbmaker_app
+    ports:
+      - 8080:8080
+    networks:
+       - backend
+    depends_on:
+      - sch_db_mysql
+
+  sch_db_mysql:
+    build: ./Database
+    image: mvcpcbmaker_db
+    networks:
+       - backend
+    env_file: Database/sch_db_mysql.env
+ 
+
+networks:
+  backend:
+    driver: bridge
+
