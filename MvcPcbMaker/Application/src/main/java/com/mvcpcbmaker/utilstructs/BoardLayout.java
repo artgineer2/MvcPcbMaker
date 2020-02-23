@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-
-import org.springframework.stereotype.Component;
 
 
 public class BoardLayout

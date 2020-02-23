@@ -2,16 +2,9 @@ package com.mvcpcbmaker.models.schematic;
 
 import java.util.Map;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.stereotype.Component;
 
-import com.mvcpcbmaker.models.schematic.PackageImpl;
 import com.mvcpcbmaker.models.schematic._ComponentImpl.ComponentPackage;
 
 public interface _Component  {

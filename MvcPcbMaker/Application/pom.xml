@@ -21,6 +21,10 @@
 		<node.version>v10.13.0</node.version>
 		<yarn.version>v1.12.1</yarn.version>
 		<java.version>1.8</java.version>
+
+		<spring.datasource.url>jdbc:mysql://localhost:3306/sch_db_mvc</spring.datasource.url>
+
+
 	</properties>
 	<dependencies>
 		<dependency>
@@ -47,13 +51,11 @@
 		<dependency>
 		  <groupId>org.junit.jupiter</groupId>
 		  <artifactId>junit-jupiter-api</artifactId>
-		  <version>5.3.2</version>
 		  <scope>test</scope>
 		</dependency>
 		<dependency>
 		  <groupId>org.junit.jupiter</groupId>
 		  <artifactId>junit-jupiter-engine</artifactId>
-		  <version>5.3.2</version>
 		  <scope>test</scope>
 		</dependency>
 		<dependency>
@@ -89,32 +91,11 @@
 
 
 
-			<build>
+	<build>
 				<plugins>
-					<!--<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>${frontend-maven-plugin.version}</version>
-						<configuration>
-							<workingDirectory>frontend</workingDirectory>
-						</configuration>
-						<executions>
-							<execution>
-								<id>yarn build</id>
-								<goals>
-									<goal>yarn</goal>
-								</goals>
-								<phase>compile</phase>
-								<configuration>
-									<arguments>build run</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>-->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.3.2</version>
 						<executions>
 							<execution>
 								<id>npm install (initialize)</id>
@@ -130,7 +111,7 @@
 									</arguments>
 								</configuration>
 							</execution>
-							<!--<execution>
+							<execution>
 								<id>npm install (clean)</id>
 								<goals>
 									<goal>exec</goal>
@@ -143,7 +124,7 @@
 										<argument>install</argument>
 									</arguments>
 								</configuration>
-							</execution>-->
+							</execution>
 
 							<execution>
 								<id>npm run build (compile)</id>

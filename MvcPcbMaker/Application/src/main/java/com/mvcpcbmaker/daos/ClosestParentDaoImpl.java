@@ -1,26 +1,14 @@
 package com.mvcpcbmaker.daos;
 
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-//import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-////import java.sql.CallableStatement;
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-////import java.sql.SQLException;
-import java.sql.Types;
-import java.util.Map;
 
 @Repository
 public class ClosestParentDaoImpl implements ClosestParentDao {
@@ -29,7 +17,7 @@ public class ClosestParentDaoImpl implements ClosestParentDao {
 	@Autowired
     private JdbcTemplate jdbcTemplate;
 	@Autowired
-	SimpleJdbcCall simpleJdbcCall;
+	private SimpleJdbcCall simpleJdbcCall;
 
 
 	public ClosestParentDaoImpl() {

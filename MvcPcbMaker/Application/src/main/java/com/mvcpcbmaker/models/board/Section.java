@@ -1,7 +1,6 @@
 package com.mvcpcbmaker.models.board;
 
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 
 import com.mvcpcbmaker.utilstructs.SectionSizeCoords;
 

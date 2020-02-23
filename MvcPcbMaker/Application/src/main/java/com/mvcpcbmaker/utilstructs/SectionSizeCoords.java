@@ -1,6 +1,5 @@
 package com.mvcpcbmaker.utilstructs;
 
-import com.mvcpcbmaker.models.board.BoardImpl;
 import com.mvcpcbmaker.utilstructs.BlockUnits;
 
 public class SectionSizeCoords
@@ -33,12 +32,12 @@ public class SectionSizeCoords
 		  this.centerX = centerX;
 		  this.centerY = centerY;
 	  }
-	 
+
 	 public Integer getWidthInt()
 	 {
 		 return Integer.valueOf(this.width);
 	 }
-	 
+
 	 public Integer getHeightInt()
 	 {
 		 return Integer.valueOf(this.height);

@@ -4,6 +4,7 @@ import ProjectDataService from '../service/ProjectDataService';
 
 class Schematic extends Component
 {
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -12,7 +13,7 @@ class Schematic extends Component
 			fileUploaded: false,
 			boardColumnCount:4
 		};
-
+		this.status = "";
 		this.schematicUploaded = this.schematicUploaded.bind(this)
 		this.schematicSelected = this.schematicSelected.bind(this)
 		this.onColumnChange = this.onColumnChange.bind(this)
@@ -22,7 +23,6 @@ class Schematic extends Component
 	schematicSelected(e)
 	{
 		console.log(e.target.id);
-		//this.props.schemSel(e.target.id);
 		this.setState({schemId: e.target.id});
 		ProjectDataService.sendSchematicId(e.target.id)
 			.then(response => {
@@ -44,20 +44,31 @@ class Schematic extends Component
 
 	render()
 	{
-		let status = "";
-		if(this.props.processStatus === "ready")
+
+		if(this.status !== "Rendering board")
 		{
-			status = "Rendering board";
+			if(this.props.processStatus === "ready")
+			{
+				this.status = "Rendering board";
+			}
+			else
+			{
+				this.status = this.props.processStatus;
+			}
+
+			console.log("render status: " + this.status);
 		}
 		else
 		{
-			status = this.props.processStatus;
+			this.status = " ";
+			console.log("render status: " + this.status);
+
 		}
     return(
 
 	<Container>
 	<Row>
-	<Col md={4}>
+	<Col md="5">
 		<Row>
 			<Col>
 				<DropdownButton id="dropdown-basic-button" title="Choose A Schematic">
@@ -87,11 +98,11 @@ class Schematic extends Component
 		</Row>
 		<Row>
 			<Col>
-				{this.state.schemId}:{status}
+				{this.state.schemId}:{this.status}
 			</Col>
 		</Row>
 	</Col>
-	<Col md={4}>
+	<Col md="7">
 		<Form.Label>Number of Layout Columns</Form.Label>
 			<Row>
 				<Col>

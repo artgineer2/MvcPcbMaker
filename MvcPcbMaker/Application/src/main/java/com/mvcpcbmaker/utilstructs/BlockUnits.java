@@ -22,7 +22,6 @@ public class BlockUnits {
 
 	 public BlockUnits getBlockUnits(double x, double y)
 	 {
-		 //BlockUnits blockSize = new BlockUnits();
 
 		 this.x = (int)(Math.ceil((x/this.gridSize)));
 		 this.y = (int)(Math.ceil((y/this.gridSize)));

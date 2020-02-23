@@ -1,5 +1,4 @@
 package com.mvcpcbmaker.models.schematic;
-//package com.pcbplaceroute.schematic;
 
 
 import java.util.ArrayList;
@@ -11,8 +10,6 @@ import java.util.Map;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.stereotype.Component;
-
 import com.mvcpcbmaker.models.schematic._ComponentImpl.ComponentPackage;
 import com.mvcpcbmaker.models.schematic._ComponentImpl.Pin;
 
@@ -21,10 +18,6 @@ public class PartImpl implements Part {
 
 
 
-	 //devicesetExcludeList = ['AGND','VCC','AVCC','VDD','VSS','+3V3A','+5V','GND']
-	 //signalExcludeList = ['AGND','VCC','AVCC','VDD','VSS','+3V3A','VMID']
-	 //parentPartTypeList = ['IC','T']
-	 //childPartLibraryList = ['rcl','SMTRArray','jumper']
 
 	private class Instance
 	{
@@ -36,7 +29,6 @@ public class PartImpl implements Part {
 	private String type;
 	private String packageName;
 	private String componentName;
-	private String value;
 	private double x;
 	private double y;
 	private Map<String,Instance> instanceMap;
@@ -65,20 +57,7 @@ public class PartImpl implements Part {
 
 		 	_Component componentObject = componentMap.get(partBlock.attr("deviceset"));
 		 	Map<String,ComponentPackage> packages = componentObject.getComponentPackages();
-	//
 		 	String packageKey = partBlock.attr("deviceset")+"_"+partBlock.attr("device");
-	//
-		 	if(partBlock.attr("library") == "rcl")
-		 	{
-		 	 	  try
-		 	 	  {
-		 	 		  this.value = partBlock.attr("value");
-		 	 	  }
-		 	 	  catch(Exception e)
-		 	 	  {
-		 	 		  this.value = "UNK";
-		 	 	  }
-		 	}
 
 
 

@@ -2,54 +2,27 @@ package utilStructs;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Assertions;
 
 import com.mvcpcbmaker.utilstructs.BoardColumnSet;
 import com.mvcpcbmaker.utilstructs.SectionSizeCoords;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
-import java.util.Vector;
-import java.util.stream.Collectors;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.xpath;
-
-import java.lang.Thread;
-
-import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
 public class BoardColumnSetTest
 {
 
 
-/*
-	public BoardColumnSet(int sectionCount, int columnCount)
-	public void setColumnSectionCountAndDivisor(int sectionCount, int divisor)
-	public void setAndSortSectionSizeCoordList(Map<String, SectionSizeCoords> sectSizeCoordsData)
-	public void createColumns()
-	public void setColumns(List<List<SectionSizeCoords>> columns)
-	public void setColumnHeightMaxAndSum()
-	public void setColumnWidthMaxAndSum()
-	public void setColumnSectionCenterX(int columnIndex, int sectionIndex, int x)
-	*/
 
 	private static BoardColumnSet brdColSet;
 	private static Map<String, SectionSizeCoords> sectSizeCoordsData;
-	private static List<List<SectionSizeCoords>> columns;
 
 
 
@@ -58,7 +31,7 @@ public class BoardColumnSetTest
 	static void setupTest()
 	{
 
-		brdColSet = new BoardColumnSet(12, 4);
+		brdColSet = new BoardColumnSet(4);
 		sectSizeCoordsData = new HashMap<String, SectionSizeCoords>();
 
 		List<double[]> sizeCoordData = new ArrayList<double[]>();

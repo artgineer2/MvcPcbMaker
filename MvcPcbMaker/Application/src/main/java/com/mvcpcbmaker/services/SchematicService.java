@@ -3,8 +3,6 @@ package com.mvcpcbmaker.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.lang.Thread;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +19,7 @@ import com.mvcpcbmaker.utilstructs.PartRowData;
 public final class SchematicService
 {
 
-	private String name;
-	private String fileName;
 	private String schematicString;
-	private String processStatus;
 	private List<String> parentPartList;
 	private List<String> childPartList;
 	private List<Map<String,Object>> packageData;
@@ -51,17 +46,12 @@ public final class SchematicService
 
 	public void createSchematicMaps(String fileName, String fileData)
 	{
-		this.fileName = fileName;
-		this.name = fileName;
 		this.schematicString = fileData;
 
 		try
 		{
-			
-
 			schematic.initSchematic(this.schematicString);
 
-			this.processStatus ="creating data tables";
 			this.packageData = schematic.getPackageTable();
 			this.partData = schematic.getPartTable();
 			this.netData = schematic.getNetTable();
@@ -107,7 +97,7 @@ public final class SchematicService
 	{
 		try
 		{
-			
+
 			for(String parentPart: this.parentPartList)
 			{
 				PartRowData parentData = partTable.getParentPartData(parentPart);
@@ -123,9 +113,8 @@ public final class SchematicService
 				}
 			}
 
-			
+
 			System.out.println("databases filled");
-			this.processStatus ="databases filled";
 		}
 		catch(Exception e)
 		{

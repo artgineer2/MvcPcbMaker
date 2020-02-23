@@ -1,13 +1,7 @@
 package com.mvcpcbmaker.models.board;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -15,8 +9,6 @@ import javax.json.JsonValue;
 
 import org.springframework.stereotype.Component;
 
-import com.mvcpcbmaker.models.board.BoardImpl;
-//import com.mvcpcbmaker.models.board.PartImpl.Size;
 import com.mvcpcbmaker.utilstructs.*;
 import com.mvcpcbmaker.utilstructs.SectionSizeCoords;
 
@@ -24,44 +16,19 @@ import com.mvcpcbmaker.utilstructs.SectionSizeCoords;
 @Component
 public class SectionImpl implements Section{
 
-	/*private class ChildPartCenterPoint
-	{	
-		double x;
-		double y;
-	}*/
-
-	/*public class GridBlockCounts
-	{
-		public int column;
-		public int row;
-	}*/
-
-
-
 
 	private final int parentChildBuffer = 20;
 	private final int parentBorderBuffer = 40;
-	private final int childChildBuffer = 10;
 	private final int childBorderBuffer = 40;
-	//private final int defaultBlockSize = 1;
-
-	//private SectionData sectionData;
 	private String name;
 	private int width;
 	private int height;
-	private int maxChildHalfWidth;
-	private int maxChildHalfHeight;
-	private double topMax;
-	private double rightMax;
-	private double bottomMax;
-	private double leftMax;
 	private int centerX;
 	private int centerY;
 	private ChildPart[] childParts;
 	private int childPartCount;
 	private ParentPartImpl parentPart;
 	private  int parentPartSides;
-	private double parentPartSizeRatio;
 	private int childGridCellSize;		 // in BlockUnits
 	private int childPartGridRowCellCount;		// row width or number of columns
 	private int childPartGridColumnCellCount; //column length
@@ -70,20 +37,14 @@ public class SectionImpl implements Section{
 	private  ChildPart[][][] childPartsGrid;
 	private BlockUnits blockUnits;
 
-	public SectionImpl() 
+	public SectionImpl()
 	{
 		try
 		{
-			this.maxChildHalfWidth = 0;
-			this.maxChildHalfHeight = 0;
-			this.topMax = 0.0;
-			this.rightMax = 0.0;
-			this.bottomMax = 0.0;
-			this.leftMax = 0.0;
 			this.centerX = 0;
 			this.centerY = 0;
 
-			//this.childGridCellSize = 0.0;
+
 			this.childParts = null;
 			this.parentPart = new ParentPartImpl();
 			this.sectionVerticalBlockCount = 0;
@@ -103,7 +64,6 @@ public class SectionImpl implements Section{
 	{
 		this.blockUnits = new BlockUnits();
 		this.name = name;
-		//System.out.println(sectionData.toString());
 		this.childPartCount = sectionData.getJsonArray("childPartDataArray").size();
 		this.childParts = new ChildPartImpl[this.childPartCount];
 		int i = 0;
@@ -118,9 +78,9 @@ public class SectionImpl implements Section{
 		}
 
 		this.parentPart  = new ParentPartImpl(
-				this.name.split("_")[0], 
-				sectionData.getString("parentPackage"), 
-				(sectionData.getJsonNumber("parentPartHeight")).doubleValue(), 
+				this.name.split("_")[0],
+				sectionData.getString("parentPackage"),
+				(sectionData.getJsonNumber("parentPartHeight")).doubleValue(),
 				(sectionData.getJsonNumber("parentPartWidth")).doubleValue());
 
 		this.setChildGridBlockSize();
@@ -132,7 +92,7 @@ public class SectionImpl implements Section{
 		this.setSectionSizeandGrid();
 
 
-	
+
 
 	}
 
@@ -156,9 +116,9 @@ public class SectionImpl implements Section{
 					if(maxChildHeight < partSize.y)
 					{
 						maxChildHeight = partSize.y;
-					}		 	 			  
-				}		 	 	 	 	
-			}	
+					}
+				}
+			}
 
 			this.childGridCellSize =  (maxChildWidth > maxChildHeight) ? maxChildWidth: maxChildHeight;
 		}
@@ -167,7 +127,6 @@ public class SectionImpl implements Section{
 
 	private void setChildPartGridArrayStructure(int sides, int row, int column)
 	{
-		//System.out.println(this.parentPart.getName()+":"+this.childPartCount+":"+sides+","+row+","+column);
 		this.parentPartSides = sides;
 		this.childPartsGrid = new ChildPartImpl[sides][row][column];
 		try
@@ -183,9 +142,8 @@ public class SectionImpl implements Section{
 						if(childPartIndex < this.childPartCount)
 						{
 							this.childPartsGrid[s][r][c] = this.childParts[childPartIndex];
-							//System.out.println("SectionImpl::setChildGridLayout["+s+"]["+r+"]["+c+"]: " + this.childPartsGrid[s][r][c].getName());
 
-							childPartIndex++;			 		 			  
+							childPartIndex++;
 						}
 						else
 						{
@@ -194,7 +152,6 @@ public class SectionImpl implements Section{
 					}
 				}
 			}
-			//System.out.println("*****************************************************************************");
 		}
 		catch(Exception e)
 		{
@@ -220,37 +177,25 @@ public class SectionImpl implements Section{
 
 		this.childPartGridColumnCellCount = this.blockUnits.divideBlockUnits1D(parentPartSize.y,this.childGridCellSize);
 		if(this.childPartGridColumnCellCount <= 0) this.childPartGridColumnCellCount = 1;
-		this.childPartGridRowCellCount = 
+		this.childPartGridRowCellCount =
 				this.blockUnits.divideBlockUnits1D(childPartParentSideCellCount,this.childPartGridColumnCellCount);
-		/*System.out.println(this.parentPart.getName()+":"+this.childPartCount
-				+"("+this.childGridCellSize+","+")"+this.parentPartSides+","+this.childPartGridRowCellCount
-				+","+this.childPartGridColumnCellCount);*/
 
 		if(this.childPartGridRowCellCount >= 3)
 		{
 			double adjustmentFactor = (double)childPartGridRowCellCount/3.00;
 			this.childPartGridColumnCellCount = (int)(Math.ceil(adjustmentFactor * this.childPartGridColumnCellCount));
-			this.childPartGridRowCellCount = 
+			this.childPartGridRowCellCount =
 					this.blockUnits.divideBlockUnits1D(childPartParentSideCellCount,this.childPartGridColumnCellCount);
-
 		}
-		
-		
-		
-		
 		this.setChildPartGridArrayStructure(this.parentPartSides,
 				this.childPartGridRowCellCount, this.childPartGridColumnCellCount);
-
-
 	}
 
 	private void setSectionSizeandGrid()
 	{
 
 		int childBlockGridVerticalCount = 0;
-		int childBlockGridHorizontalCount = 0;
 		int parentPartVerticalCount = 0;
-		int parentPartHorizontalCount = 0;
 
 		if(this.parentPartSides == 4)
 		{
@@ -269,38 +214,32 @@ public class SectionImpl implements Section{
 			{
 				this.sectionVerticalBlockCount = childBlockGridVerticalCount;
 			}
-		} 
-		this.sectionHorizontalBlockCount = 
+		}
+		this.sectionHorizontalBlockCount =
 				this.parentPart.getWidth() + (2*this.childPartGridRowCellCount*this.childGridCellSize);
 
 
 		if(this.childPartCount > 0)
 		{
-			this.width = 
-					this.sectionHorizontalBlockCount 
+			this.width =
+					this.sectionHorizontalBlockCount
 					+ 2*(this.childBorderBuffer + this.parentChildBuffer);
-			this.height = 
-					this.sectionVerticalBlockCount 
+			this.height =
+					this.sectionVerticalBlockCount
 					+ 2*(this.childBorderBuffer + this.parentChildBuffer);
 		}
 		else
 		{
 			BlockUnits parentSize = this.parentPart.getSize();
-			this.width = 
+			this.width =
 					parentSize.x + 2*this.parentBorderBuffer;
-			this.height = 
+			this.height =
 					parentSize.y + 2*this.parentBorderBuffer;
 		}
-		
-		
-		/*System.out.println(this.parentPart.getName()
-				+"\t"+this.blockUnits.getDoubleValue(this.parentPart.getWidth())
-				+"\t"+this.childPartGridRowCellCount
-				+"\t"+this.blockUnits.getDoubleValue(this.childGridCellSize)
-				+"\t"+this.blockUnits.getDoubleValue(this.width));*/
+
 	}
 
-	
+
 
 
 
@@ -308,12 +247,10 @@ public class SectionImpl implements Section{
 	@Override
 	public SectionSizeCoords getSectionSizeCoord()
 	{
-		// SectionSizeCoords sectionSize = new SectionSizeCoords(this.name, this.width, this.height);
-		//System.out.println(this.name+":"+this.width+","+this.height+":"+this.centerX+","+this.centerY);
 		return new SectionSizeCoords(this.name, this.width, this.height, this.centerX, this.centerY);
 	}
 
-	//	  @Override
+	@Override
 	public void setSectionCenterPoint(int x, int y)
 	{
 		this.centerX = x;
@@ -332,40 +269,23 @@ public class SectionImpl implements Section{
 
 	private void setChildGridLayout()
 	{
-		/************* Set child grid physical cell layout ******************/	
-		/*System.out.println(this.parentPart.getName()+"\t"+this.childPartCount+"\t"+this.parentPartSides
-				+"\t"+this.childPartGridRowCellCount+"\t"+childPartGridColumnCellCount);*/
+		/************* Set child grid physical cell layout ******************/
 
 		for(int i = 0; i < this.parentPartSides; i++)
 		{
 			for(int j = 0; j < this.childPartGridRowCellCount; j++)
-			{					 
+			{
 				for(int k = 0; k < this.childPartGridColumnCellCount; k++)
-				{				
+				{
 
 					int x1 = this.parentPart.getPartCenterX()-this.parentPart.getWidth()/2 - this.parentChildBuffer - j*this.childGridCellSize;
 					int x2 = this.parentPart.getPartCenterX()-this.parentPart.getWidth()/2 - this.parentChildBuffer - (j+1)*this.childGridCellSize;
 					int y1 = this.parentPart.getPartCenterY()-this.parentPart.getHeight()/2 + k*this.childGridCellSize;
 					int y2 = this.parentPart.getPartCenterY()-this.parentPart.getHeight()/2 + (k+1)*this.childGridCellSize;
-					//System.out.print(this.parentPart.getName()+":"+i+","+j+","+k+"\t");
-					//System.out.println(x1+","+x2+","+y1+","+y2);
-					//if(i == 0)
-					{
-						this.childPartsGrid[i][j][k].setGridBlockBoundaries(x1,x2,y1,y2);
-						//System.out.println("SectionImpl::setChildGridLayout["+i+"]["+j+"]["+k+"]: " + this.childPartsGrid[i][j][k].getName());
-					}
-					/*else
-							{
-								this.childPartsGrid[i][j][k].setGridBlockBoundaries(0,0,0,0);
-							}*/
+					this.childPartsGrid[i][j][k].setGridBlockBoundaries(x1,x2,y1,y2);
 				}
 			}
 		}
-		//System.out.println("*****************************************************************************");
-		/*System.out.print("setChildGroupGridSize: ");
-			 	System.out.println(this.childPartCount+","+this.parentPartSides+","+childPartSideCount
-			 			+","+parentPartGrid.column+","+parentPartGrid.row
-			 			+","+this.childPartGridColumnCellCount+","+this.childPartGridRowCellCount);*/
 	}
 
 	private void setChildPartGridCenterPoints()
@@ -382,7 +302,7 @@ public class SectionImpl implements Section{
 					{
 						this.setChildPartGridCenterPoint(s, r, c);
 
-						childPartIndex++;			 		 			  
+						childPartIndex++;
 					}
 					else
 					{
@@ -400,19 +320,19 @@ public class SectionImpl implements Section{
 		int centerX = 0;
 		int centerY = 0;
 		BlockUnits parentSize = this.parentPart.getSize();
-		
+
 		int yColumnStartOffset = 1*(1-(this.childPartGridColumnCellCount%2));
-		
+
 		if(this.childPartGridRowCellCount%2 == 0) // even number of rows
 		{
-			
+
 			switch(side)
 			{
 			case 0:
 				centerX = this.centerX-(this.parentPart.getWidth()/2)
 						-this.parentChildBuffer
 						- this.childGridCellSize*(1+row);
-				
+
 				centerY = this.centerY+
 						this.childGridCellSize*(
 								(this.childPartGridColumnCellCount)/2-column
@@ -428,7 +348,7 @@ public class SectionImpl implements Section{
 								(this.childPartGridColumnCellCount)/2-column
 								)-(yColumnStartOffset*this.childGridCellSize)/2;
 				break;
-			case 2:  
+			case 2:
 				centerX = this.centerX-this.childGridCellSize*(
 						(this.childPartGridRowCellCount-1/2)-column
 						);
@@ -456,7 +376,7 @@ public class SectionImpl implements Section{
 				centerX = this.centerX-(this.parentPart.getWidth()/2)
 				-this.parentChildBuffer
 				- this.childGridCellSize*(1 + row);
-				
+
 				centerY = this.centerY+this.childGridCellSize*(
 						(this.childPartGridColumnCellCount)/2-column
 						)-(yColumnStartOffset*this.childGridCellSize)/2;
@@ -465,16 +385,16 @@ public class SectionImpl implements Section{
 				centerX = this.centerX+(this.parentPart.getWidth()/2)
 						+this.parentChildBuffer
 						+this.childGridCellSize*(1 + row);
-				
+
 				centerY = this.centerY+this.childGridCellSize*(
 						(this.childPartGridColumnCellCount)/2-column
 						)-(yColumnStartOffset*this.childGridCellSize)/2;
 				break;
-			case 2:  
+			case 2:
 				centerX = this.centerX-this.childGridCellSize*(
 						(this.childPartGridRowCellCount/2)-column
 						);
-				
+
 				centerY = this.centerY-(parentSize.y/2)
 						-this.parentChildBuffer
 						-this.childGridCellSize*(1 + row);
@@ -483,7 +403,7 @@ public class SectionImpl implements Section{
 				centerX = this.centerX+this.childGridCellSize*(
 						(this.childPartGridRowCellCount/2)-column
 						);
-				
+
 				centerY = this.centerY+(parentSize.y/2)
 						+this.parentChildBuffer
 						+this.childGridCellSize*(1 + row);
@@ -501,7 +421,6 @@ public class SectionImpl implements Section{
 	public JsonObject getSectionDataJson()
 	{
 		JsonObjectBuilder sectionDataObject = Json.createObjectBuilder();
-		JsonObject sectionData = null;
 		try
 		{
 
@@ -514,7 +433,6 @@ public class SectionImpl implements Section{
 					JsonArrayBuilder columnArray = Json.createArrayBuilder();
 					for(int c = 0; c < this.childPartGridColumnCellCount ; c++)
 					{
-						//System.out.println("SectionImpl::getSectionDataJson["+s+"]["+r+"]["+c+"]: " + this.childPartsGrid[s][r][c].getName());
 						columnArray.add(this.childPartsGrid[s][r][c].getPartDataJson());
 					}
 					rowArray.add(columnArray.build());
@@ -542,7 +460,6 @@ public class SectionImpl implements Section{
 			sectionDataObject.add("childPartGridColumnCellCount",this.childPartGridColumnCellCount);
 			sectionDataObject.add("childPartsGrid",sideArray.build());
 
-			//System.out.println("*****************************************************************************");
 		}
 		catch(Exception e)
 		{

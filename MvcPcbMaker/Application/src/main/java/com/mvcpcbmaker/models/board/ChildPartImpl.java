@@ -4,18 +4,17 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import com.mvcpcbmaker.utilstructs.BlockUnits;
 import com.mvcpcbmaker.utilstructs.CenterPoint;
 
 public class ChildPartImpl extends PartImpl implements ChildPart {
 
 	public class GridBlockBoundaries
 	{
-		public int x1; 
-		public int x2; 
-		public int y1; 
+		public int x1;
+		public int x2;
+		public int y1;
 		public int y2;
-		
+
 		GridBlockBoundaries()
 		{
 			this.x1 = 0;
@@ -23,7 +22,7 @@ public class ChildPartImpl extends PartImpl implements ChildPart {
 			this.x2 = 0;
 			this.y2 = 0;
 		}
-		
+
 		GridBlockBoundaries(int x1, int x2, int y1, int y2)
 		{
 			this.x1 = x1;
@@ -31,23 +30,20 @@ public class ChildPartImpl extends PartImpl implements ChildPart {
 			this.x2 = x2;
 			this.y2 = y2;
 		}
-		
-		
+
+
 	}
-	
-	private int gridBlockSize;
+
 	private int gridBlockCenterX;
 	private int gridBlockCenterY;
-	//private BlockUnits blockUnits;
 	private GridBlockBoundaries blockBoundaries;
-	
+
 	public ChildPartImpl() {
-		// TODO Auto-generated constructor stub
 		super();
 		this.blockBoundaries = new GridBlockBoundaries();
 		this.gridBlockCenterX = 0;
 		this.gridBlockCenterY = 0;
-		
+
 
 	}
 
@@ -55,16 +51,16 @@ public class ChildPartImpl extends PartImpl implements ChildPart {
 	{
 		super(name,type,height,width);
 		this.blockBoundaries = new GridBlockBoundaries();
-		
+
 	}
-	
+
 	public ChildPartImpl(String name, String type, String _package, double height, double width)
 	{
 		super(name,type,_package,height,width);
 		this.blockBoundaries = new GridBlockBoundaries();
 	}
 
-	
+
 
 
 	@Override
@@ -96,7 +92,7 @@ public class ChildPartImpl extends PartImpl implements ChildPart {
 
 	@Override
 	public void setGridBlockBoundaryPoint(String point, int value) {
-		
+
 		switch(point)
 		{
 		case "x1":
@@ -113,10 +109,10 @@ public class ChildPartImpl extends PartImpl implements ChildPart {
 			break;
 		default:;
 		}
-		
+
 	}
 
-	
+
 	@Override
 	public CenterPoint getGridBlockCenterPoint()
 	{
@@ -129,14 +125,14 @@ public class ChildPartImpl extends PartImpl implements ChildPart {
 	{
 		return null;
 	}
-	
 
-	
+
+
 	@Override
 	public JsonObject getPartDataJson()
 	{
 		JsonObjectBuilder partDataObject = Json.createObjectBuilder();
-				
+
 		partDataObject.add("name", this.name);
 		partDataObject.add("height", this.height);
 		partDataObject.add("width", this.width);
@@ -147,16 +143,7 @@ public class ChildPartImpl extends PartImpl implements ChildPart {
 		partDataObject.add("blockBoundaryY1", this.blockUnits.getDoubleValue(this.blockBoundaries.y1));
 		partDataObject.add("blockBoundaryY2", this.blockUnits.getDoubleValue(this.blockBoundaries.y2));
 		partDataObject.add("package", this._package);
-		
-		
-		
+
 		return partDataObject.build();
 	}
-
-
-	
-	
-	
-	
-	
 }

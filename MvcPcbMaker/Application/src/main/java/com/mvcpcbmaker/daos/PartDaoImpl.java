@@ -1,17 +1,12 @@
 package com.mvcpcbmaker.daos;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.mvcpcbmaker.utilstructs.PartRowData;
@@ -64,12 +59,6 @@ public class PartDaoImpl implements PartDao {
 
 
 	@Override
-	public void getPartData() { // this operation is done in DB stored procedure
-		// TODO Auto-generated method stub
-
-	}
-
-	//@Override
 	public void clearPartData() {
 		String clearPartTableString = "truncate table part";
 		try
@@ -110,8 +99,6 @@ public class PartDaoImpl implements PartDao {
 	@Override
 	public List<String> getParentPartColumnData(String columnName) {
 		List<String> columnData = new ArrayList<String>();
-		class ColumnDataList { List<String> columnData; }
-		String item;
 		String getParentPartColumnString = "SELECT " + columnName + " FROM parent_parts";
 		try
 		{
@@ -120,9 +107,6 @@ public class PartDaoImpl implements PartDao {
 			{
 				columnData = columnDataList.stream().map(x->x).collect(Collectors.toList());
 			}
-
-
-
 		}
 		catch(Exception Ex)
 		{
@@ -210,7 +194,7 @@ public class PartDaoImpl implements PartDao {
 		{
 			Ex.printStackTrace();
 		}
-		//columnDataList = null;//new ArrayList<>();
+
 
 		return columnData;
 
@@ -250,7 +234,7 @@ public class PartDaoImpl implements PartDao {
 		{
 			Ex.printStackTrace();
 		}
-		//this.partRowDataList = null;//new ArrayList<>();
+
 	}
 
 

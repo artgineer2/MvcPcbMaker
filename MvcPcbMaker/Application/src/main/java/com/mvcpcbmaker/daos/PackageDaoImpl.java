@@ -5,15 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import javax.security.auth.x500.X500Principal;
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import com.mvcpcbmaker.daos.PackageDao;
 
@@ -21,26 +16,22 @@ import com.mvcpcbmaker.daos.PackageDao;
 @Repository
 public class PackageDaoImpl implements PackageDao {
 
-	private String name;
-	private double height;
-	private double width;
-	private int pinCount;
 	private List<Object[]> packageRowDataList;
-	
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
-	
-	
+
+
+
 	public PackageDaoImpl()
 	{
 	}
-	
-	
+
+
 	@Override
 	public void addPackageData(List<Map<String,Object>> packageListData)
 	{
-		String addPackageString = "INSERT INTO package VALUES (?,?,?,?)";		
+		String addPackageString = "INSERT INTO package VALUES (?,?,?,?)";
 		clearPackageData();
 		this.packageRowDataList = new ArrayList<Object[]>();
 		try
@@ -54,7 +45,7 @@ public class PackageDaoImpl implements PackageDao {
 				tempObj[3] = Integer.parseInt(packageData.get("pinCount").toString());
 				this.packageRowDataList.add(tempObj);
 			}
-			
+
 			jdbcTemplate.batchUpdate(addPackageString, packageRowDataList);
 		}
 		catch(Exception Ex)
@@ -62,23 +53,17 @@ public class PackageDaoImpl implements PackageDao {
 			Ex.printStackTrace();
 		}
 	}
-	
+
 
 	@Override
 	public Map<String,Double> getPackageSizeData(String packageName) {
-		// TODO Auto-generated method stub
-			class PackageSize
-			{
-				public double width;
-				public double height;
-			}
-			
+
 			Map<String,Double> packageSizeData = new HashMap<String,Double>();
-			
+
 			String getPackageRowString = "SELECT height, width FROM package WHERE name = ?";
 			try
 			{
-				List<Map<String,Object>> packageSizeDataList = jdbcTemplate.queryForList(getPackageRowString,new Object[]{packageName});//, Map<String,Double>);
+				List<Map<String,Object>> packageSizeDataList = jdbcTemplate.queryForList(getPackageRowString,new Object[]{packageName});
 				if(packageSizeDataList.size() > 0)
 				{
 					Map<String,Object> packageSize = packageSizeDataList.get(0);
@@ -90,8 +75,8 @@ public class PackageDaoImpl implements PackageDao {
 			{
 				Ex.printStackTrace();
 			}
-		
-		
+
+
 		return  packageSizeData;
 	}
 
@@ -106,7 +91,7 @@ public class PackageDaoImpl implements PackageDao {
 		{
 			Ex.printStackTrace();
 		}
-		this.packageRowDataList = null;//new ArrayList<>();
+		this.packageRowDataList = null;
 
 	}
 

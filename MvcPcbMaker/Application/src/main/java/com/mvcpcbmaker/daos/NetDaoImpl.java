@@ -1,11 +1,8 @@
 package com.mvcpcbmaker.daos;
 
 import java.util.ArrayList;
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,14 +12,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 @Repository
 public class NetDaoImpl implements NetDao {
 
-
-
-
-	private String name;
-	private String part;
-	private String pinName;
-	private double partPinX;
-	private double partPinY;
 	private List<Object[]> netRowDataList;
 
 	@Autowired
@@ -39,7 +28,6 @@ public class NetDaoImpl implements NetDao {
 	public void addNetData(List<Map<String,Object>> netListData) {
 
 		String addNetQueryString = "INSERT INTO net VALUES (?,?,?,?,?)";
-		//clearNetData();
 		this.netRowDataList = new ArrayList<Object[]>();
 		try
 		{
@@ -52,11 +40,6 @@ public class NetDaoImpl implements NetDao {
 				tempObj[3] = Double.parseDouble(netData.get("x").toString());
 				tempObj[4] = Double.parseDouble(netData.get("y").toString());
 				this.netRowDataList.add(tempObj);
-				for(Object object: tempObj)
-				{
-					System.out.print(object.toString() + ",");
-				}
-				System.out.println("");
 			}
 			jdbcTemplate.batchUpdate(addNetQueryString, netRowDataList);
 		}
@@ -71,7 +54,6 @@ public class NetDaoImpl implements NetDao {
 
 	@Override
 	public void getNetData() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -88,7 +70,7 @@ public class NetDaoImpl implements NetDao {
 		{
 			Ex.printStackTrace();
 		}
-		this.netRowDataList = null;//new ArrayList<>();
+		this.netRowDataList = null;
 	}
 
 	@Override

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ProjectDataService from '../service/ProjectDataService';
 import Schematic from './Schematic';
 import Board from './Board';
+import Description from './Description';
+import {Container, Row, Col} from 'react-bootstrap';
 //import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 class Project extends Component {
@@ -95,18 +97,27 @@ class Project extends Component {
 
 		console.log("Project render: " + boardJsonData);
 		return (
-					<React.Fragment>
-					<Schematic
-					schemSel={this.schematicSelected}
-					schemId={this.state.schematicId}
-					schematicUploaded={this.state.fileUploaded}
-					schematicDataUploaded={this.dataUploaded}
-					onBoardColumnChange={this.onColumnChange}
-					processStatus={this.state.processStatus}/>
-
-					<Board boardJsonData={boardJsonData} processStatus={processStatus} />
-					</React.Fragment>
-
+				<Container>
+					<Row>
+						<Col xs lg="2">
+							<Description />
+						</Col>
+						<Col xs lg="10">
+							<Row>
+								<Schematic
+								schemSel={this.schematicSelected}
+								schemId={this.state.schematicId}
+								schematicUploaded={this.state.fileUploaded}
+								schematicDataUploaded={this.dataUploaded}
+								onBoardColumnChange={this.onColumnChange}
+								processStatus={this.state.processStatus}/>
+							</Row>
+							<Row>
+								<Board boardJsonData={boardJsonData} processStatus={processStatus} />
+							</Row>
+						</Col>
+					</Row>
+				</Container>
 		)
 	}
 }

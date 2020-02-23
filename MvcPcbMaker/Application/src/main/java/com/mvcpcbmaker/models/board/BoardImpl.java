@@ -1,18 +1,11 @@
 package com.mvcpcbmaker.models.board;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
-import java.util.stream.Collectors;
-import java.lang.Thread;
 import javax.json.*;
 
-import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +14,6 @@ import com.mvcpcbmaker.daos.NetDao;
 import com.mvcpcbmaker.daos.PackageDao;
 import com.mvcpcbmaker.daos.PartDao;
 import com.mvcpcbmaker.daos.SectionsDao;
-import com.mvcpcbmaker.utilstructs.CenterPoint;
 import com.mvcpcbmaker.utilstructs.BlockUnits;
 import com.mvcpcbmaker.utilstructs.BoardColumnSet;
 import com.mvcpcbmaker.utilstructs.SectionSizeCoords;
@@ -33,7 +25,6 @@ public class BoardImpl implements Board{
 
 
 	private String name;
-	private int totalSectionHeight;
 	private int sectionCount;
 	private static final int boardEdgeBuffer = 40;
 	private Map<String,SectionImpl> sections;
@@ -42,8 +33,6 @@ public class BoardImpl implements Board{
 	private BoardLayout boardLayout;
 	private BlockUnits blockUnits;
 	private int columnCount;
-	private int sectionsTotalWidth;
-	private int sectionsMaxHeight;
 
 	@Autowired
 	PackageDao packageTable;
@@ -73,7 +62,6 @@ public class BoardImpl implements Board{
 		 try
 		 {
 			 this.name = boardData.getString("name");
-			 this.totalSectionHeight = 0;
 			 this.sectionCount = 0;
 			 this.columnCount = columns;
 
@@ -87,13 +75,10 @@ public class BoardImpl implements Board{
 				 JsonObject tempJson = ((JsonObject)sectionDataJson);
 				 String sectionName = tempJson.getString("parentPart") + "_Section";
 				 this.sections.put(sectionName, new SectionImpl(sectionName,tempJson));
-				 this.totalSectionHeight += this.sections.get(sectionName).getSectionSizeCoord().height;
 				 this.sectionSizes.put(sectionName, this.sections.get(sectionName).getSectionSizeCoord());
 			 }
 
-		 	  //this.createBoardColumnSetMap();
 			  this.createBoardColumnSet(this.columnCount);
-		 	  //this.optimizeBoardColumnHeights();
 		 	  this.setBoardLayoutBoardData();
 
 			  this.setBoardSectionCenterPoints();
@@ -112,7 +97,7 @@ public class BoardImpl implements Board{
 	 private void createBoardColumnSet(int columnCount)
 	 {
 
-	 	 this.boardColumnSet = new BoardColumnSet(this.sectionCount,columnCount);
+	 	 this.boardColumnSet = new BoardColumnSet(columnCount);
 
 	 	 try
 	 	 {
@@ -130,66 +115,26 @@ public class BoardImpl implements Board{
 
 
 
-	 	 // # bring each board section height as close to sectionHeightAverage as possbile by popping smallest sections from higher sections and putting them on short section
-//
-	 private void optimizeBoardColumnHeights()
-	 {
-
-	 	  /*for(int divisor : this.boardColumnSets.keySet())
-	 	  {
-	 		 BoardColumnSet brdColSet = this.boardColumnSets.get(divisor);
- 	 	 	 double colHgtAve = brdColSet.brdColHeightAverage;
- 	 	 	 while(true)
- 	 	 	 {
-	 	 	 	  for(int i = 0; i < divisor; i++)
-	 	 	 	  {
- 	 	 	 	 	  if(brdColSet.brdSectColHeightSums.get(i) > colHgtAve)
- 	 	 	 	 	  {
-
-	 	 	 	 		SectionSizeCoords poppedSection = brdColSet.brdSectSizeCols.get(i).pop();
- 	 	 	 	 		brdColSet.brdSectSizeCols.get(divisor-1).push(poppedSection);
-
- 	 	 	 	 	  }
-	 	 	 	  }
- 	 	 	 	 if((brdColSet.brdSectSizeCols.get(divisor-1).stream().mapToDouble(x -> x.height).sum()) > 0.85*colHgtAve)
- 	 	 	 	 {
- 	 	 	 		 break;
- 	 	 	 	 }
- 	 	 	 }
-
-	 	  }*/
-	 }
-//
 	 private void setBoardLayoutBoardData()
 	 {
 
 	 	  this.blockUnits = new BlockUnits();
 	 	  try
 	 	  {
-			  //for(int divisor : this.boardColumnSets.keySet())
-			  {
-
-		 	 	//post-optimization
-		 	 	//this.boardColumnSets.get(5).setColumnHeightMaxAndSum();
-		 	 	//this.boardColumnSets.get(5).setColumnWidthMaxAndSum();
-
-			  }
 
 			 this.boardLayout.sectionColumns.setColumnSectionCountAndDivisor(this.sectionCount, this.columnCount);
 
 		 	  this.boardLayout.name = this.name;
 		 	  this.boardLayout.columnCount =  this.columnCount;
-		 	  //this.boardLayout.sectionColumns.setColumns(this.boardColumnSets.get(5).getColumns());
 		 	  this.boardLayout.sectionColumns.setColumns(this.boardColumnSet.getColumns());
 		 	  this.boardLayout.sectionColumns.setColumnHeightMaxAndSum();
 		 	  this.boardLayout.sectionColumns.setColumnWidthMaxAndSum();
-		 	  //this.boardLayout.columnWidths = this.boardColumnSets.get(5).getColumnWidths();
 		 	  this.boardLayout.columnWidths = this.boardColumnSet.getColumnWidths();
 		 	  this.boardLayout.sectionsTotalWidth = this.boardLayout.sectionColumns.getColumnWidthSum();
 		 	  this.boardLayout.sectionsTotalHeight = this.boardLayout.sectionColumns.getColumnHeightMax();
 
-		 	  this.boardLayout.boardWidth = this.boardLayout.sectionsTotalWidth + 2*this.boardEdgeBuffer;
-		 	  this.boardLayout.boardHeight = this.boardLayout.sectionsTotalHeight + 2*this.boardEdgeBuffer;
+		 	  this.boardLayout.boardWidth = this.boardLayout.sectionsTotalWidth + 2*BoardImpl.boardEdgeBuffer;
+		 	  this.boardLayout.boardHeight = this.boardLayout.sectionsTotalHeight + 2*BoardImpl.boardEdgeBuffer;
 
 	 	  }
 	 	  catch(Exception e)
@@ -204,8 +149,7 @@ public class BoardImpl implements Board{
 	 private void setBoardSectionCenterPoints()
 	 {
 	 	  List<Integer> columnCenterLines = new ArrayList<>();
-	 	  int currentCenterLine = this.boardEdgeBuffer;
-	 	  //int columnCount =  this.boardLayout.columnCount;
+	 	  int currentCenterLine = BoardImpl.boardEdgeBuffer;
 
 	 	  for(int i = 0; i < this.boardLayout.columnCount; i++)
 	 	  {
@@ -227,7 +171,7 @@ public class BoardImpl implements Board{
 	 	  for(int i = 0; i < this.boardLayout.columnCount; i++)
 	 	  {
 	 		  List<SectionSizeCoords> column = this.boardLayout.sectionColumns.getColumn(i);
-	 	 	  int centerY = this.boardEdgeBuffer;
+	 	 	  int centerY = BoardImpl.boardEdgeBuffer;
 	 	 	  int centerX = columnCenterLines.get(sectionIndex);
 	 	 	  for(int j = 0; j < column.size(); j++)
 	 	 	  {
@@ -291,6 +235,7 @@ public class BoardImpl implements Board{
 		 	{
 		 		sectionDataJson.add(sectionName, (JsonValue)this.boardLayout.sectionData.get(sectionName));
 		 	}
+
 		 	boardLayoutJson.add("name", this.boardLayout.name);
 		 	boardLayoutJson.add("columnWidths", columnWidthsJson.build());
 		 	boardLayoutJson.add("columnCount", this.boardLayout.columnCount);
@@ -318,12 +263,6 @@ public class BoardImpl implements Board{
 			this.sectionSizes = null;
 			 boardColumnSet = null;
 			  boardLayout = null;
-
 		}
-
-
-
-//
-//
 
 }

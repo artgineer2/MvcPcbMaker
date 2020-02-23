@@ -2,8 +2,6 @@ package com.mvcpcbmaker.services;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.lang.Thread;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -26,8 +24,6 @@ import com.mvcpcbmaker.utilstructs.PartRowData;
 public final class BoardService
 {
 		private String name;
-		private int columns;
-		//private String sectionDataString;
 		private JsonObject boardDataJsonBuilt = null;
 		private JsonObject boardLayoutJson = null;
 		private JsonObjectBuilder boardDataJson = null;
@@ -58,7 +54,6 @@ public final class BoardService
 	  public JsonObject createBoardLayout(String name, int columns)
 	  {
 		  this.name = name;
-	 	  this.columns = columns;
 	 	  this.boardDataJsonBuilt = null;
 	 	  this.boardLayoutJson = null;
 
@@ -75,11 +70,9 @@ public final class BoardService
 		 		 try
 		 		 {
 			 	 	  String parentName = sectionTableKey.split("_")[0];
-			 	 	  //List<String>parentRowData = this.partTable.getParentPartRowData(parentName);//(['package','width','height'],'name=\'' + parentName + '\'',None)
 			 	 	  String parentPackage = this.sectionTables.getSectionParentPackage(sectionTableKey);
 
 			 	 	  List<String> childNameList = this.sectionTables.getSectionColumnData(sectionTableKey,"child_part");
-			 	 	  List<String> childPackageList = this.sectionTables.getSectionColumnData(sectionTableKey,"child_package");
 			 	 	  Map<String,Double> parentPackageSize = this.packageTable.getPackageSizeData(parentPackage);
 
 			 	 	  int childListSize = childNameList.size();

@@ -1,7 +1,7 @@
 import React from 'react';
 //import Project from './Project';
 //import ProjectDataService from '../service/ProjectDataService';
-
+import {Container, Row, Col} from 'react-bootstrap';
 
 class Part extends React.Component {
 	render() {
@@ -236,8 +236,9 @@ class Board extends React.Component {
 		}
 
 		return (
-			<div id="boardRowDiv"  className="row"  style={{border: "1px solid",height:"690px"}}>
-				<div id="boardColDiv" className="col-md-12" style={{width: "100%", height: "100%", overflow: "scroll", textAlign: "center"}}>
+			<Container>
+			<Row id="boardRowDiv" style={{border: "1px solid",height:"690px"}}>
+				<Col xs lg="12" id="boardColDiv"  style={{width: "100%", height: "100%", overflow: "scroll", textAlign: "center"}}>
 				<svg  id="board" width={boardJsonData.boardWidth} height={boardJsonData.boardHeight}
 					style={{margin: "0", position: "relative", top: "40%", left: "0%"}} transform={"scale(2.0)"}>
 					<g>
@@ -249,8 +250,9 @@ class Board extends React.Component {
 				</svg>
 
 
-				</div>
-			</div>
+				</Col>
+			</Row>
+			</Container>
 
 			)
 
@@ -259,3 +261,24 @@ class Board extends React.Component {
 
 
 export default Board
+
+
+/*
+<div id="boardRowDiv"  className="row"  style={{border: "1px solid",height:"690px"}}>
+	<div id="boardColDiv" className="col-md-12" style={{width: "100%", height: "100%", overflow: "scroll", textAlign: "center"}}>
+	<svg  id="board" width={boardJsonData.boardWidth} height={boardJsonData.boardHeight}
+		style={{margin: "0", position: "relative", top: "40%", left: "0%"}} transform={"scale(2.0)"}>
+		<g>
+			{boardSvg}
+			{gridSvg}
+			{sectionsSvg}
+
+		</g>
+	</svg>
+
+
+	</div>
+</div>
+
+
+*/

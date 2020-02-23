@@ -1,14 +1,9 @@
 package com.mvcpcbmaker.utilstructs;
 
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
-import java.util.Vector;
 import java.util.stream.Collectors;
-import java.lang.Thread;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -19,7 +14,6 @@ import javax.json.JsonObjectBuilder;
 public class BoardColumnSet
 {
 	private int columnCount;
-	private int columnSectionCount;
 	private int totalSectionHeight;
 	private List<SectionSizeCoords> sectSizeCoordList;
 	private List<SectionSizeCoords> sortedSectSizeCoordList;
@@ -28,13 +22,11 @@ public class BoardColumnSet
 	private List<Integer> columnWidthMaxs;
 	private int columnHeightMax;
 	private int columnWidthSum;
-	private double brdHWRatio;
 	private BlockUnits blockUnits;
 
 	public BoardColumnSet()
 	{
 		this.totalSectionHeight = 0;
-		this.brdHWRatio = 0.0;
 		this.sectSizeCoordList = new ArrayList<SectionSizeCoords>();
 		this.sortedSectSizeCoordList  = new ArrayList<SectionSizeCoords>();
 		this.boardColumns = new ArrayList<List<SectionSizeCoords>>();
@@ -49,11 +41,10 @@ public class BoardColumnSet
 		this.columnWidthSum = 0;
 	}
 
-	public BoardColumnSet(int sectionCount, int columnCount)
+	public BoardColumnSet(int columnCount)
 	{
 		this.totalSectionHeight = 0;
 		this.columnCount = columnCount;
-		this.brdHWRatio = 0.0;
 		this.sectSizeCoordList = new ArrayList<SectionSizeCoords>();
 		this.sortedSectSizeCoordList  = new ArrayList<SectionSizeCoords>();
 		this.boardColumns = new ArrayList<List<SectionSizeCoords>>();
@@ -64,7 +55,6 @@ public class BoardColumnSet
 		this.brdSectColHeightSums = new ArrayList<Integer>();
 		this.columnWidthMaxs = new ArrayList<Integer>();
 		this.blockUnits = new BlockUnits();
-		this.columnSectionCount = this.blockUnits.divideBlockUnits1D(sectionCount,this.columnCount);//(sectionCount/this.columnCount);
 		this.columnHeightMax = 0;
 		this.columnWidthSum = 0;
 
@@ -73,7 +63,6 @@ public class BoardColumnSet
 	public void setColumnSectionCountAndDivisor(int sectionCount, int divisor)
 	{
 		this.columnCount = divisor;
-		this.columnSectionCount = this.blockUnits.divideBlockUnits1D(sectionCount,divisor);
 	}
 
 	public void setAndSortSectionSizeCoordList(Map<String, SectionSizeCoords> sectSizeCoordsData)
@@ -108,7 +97,7 @@ public class BoardColumnSet
 
 	public List<SectionSizeCoords> getColumn(int index)
 	{
-		return /*(List<SectionSizeCoords>)*/ this.boardColumns.get(index);
+		return this.boardColumns.get(index);
 	}
 
 	public List<List<SectionSizeCoords>> getColumns()
@@ -194,11 +183,8 @@ public class BoardColumnSet
 		return this.columnWidthMaxs;
 	}
 
-
 	public JsonArray getBoardSectSizeDataJson()
 	{
-
-
 		JsonArrayBuilder columnArrayDataJson = Json.createArrayBuilder();
 		for(List<SectionSizeCoords> column : this.boardColumns)
 		{
@@ -216,11 +202,8 @@ public class BoardColumnSet
 			}
 			columnArrayDataJson.add(sectArrayDataJson.build());
 		}
-
-
 		return columnArrayDataJson.build();
 	}
-
 
 	public void cleanOutObjectData()
 	{
@@ -229,23 +212,5 @@ public class BoardColumnSet
 		  boardColumns = null;
 		  brdSectColHeightSums = null;
 		  columnWidthMaxs = null;
-		  // try
-		  // {
-			//   System.gc();
-			//   Thread.sleep(15000);
-		  // }
-		  // catch(Exception e)
-		  // {
-			//   System.out.print("BoardColumnSet cleanOutObjectData error: ");
-			//   e.printStackTrace();
-		  // }
 	}
-
-
-
-
-
-
-
-
 }

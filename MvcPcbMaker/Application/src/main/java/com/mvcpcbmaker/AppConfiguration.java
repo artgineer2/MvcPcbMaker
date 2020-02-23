@@ -1,13 +1,8 @@
 package com.mvcpcbmaker;
 
 import javax.sql.DataSource;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -17,14 +12,14 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
 public class AppConfiguration {
-	
+
 
 	@Autowired
 	private Environment env;
-	
 
-	
-	
+
+
+
 
 
     @Bean
@@ -36,7 +31,7 @@ public class AppConfiguration {
             dataSource.setUrl(env.getRequiredProperty("spring.datasource.url"));
             dataSource.setUsername(env.getRequiredProperty("spring.datasource.username"));
             dataSource.setPassword(env.getRequiredProperty("spring.datasource.password"));
-   		
+
     	}
     	catch(Exception e)
     	{
@@ -44,8 +39,8 @@ public class AppConfiguration {
     	}
         return dataSource;
     }
-    
-    
+
+
     @Bean(name = "jdbcTemplate")
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -66,7 +61,7 @@ public class AppConfiguration {
     	SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
     	return simpleJdbcCall;
     }
-    
-    
-    
+
+
+
 }

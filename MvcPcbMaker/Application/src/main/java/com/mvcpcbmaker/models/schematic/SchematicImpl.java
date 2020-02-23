@@ -1,11 +1,9 @@
 package com.mvcpcbmaker.models.schematic;
-//package com.pcbplaceroute.schematic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,14 +13,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mvcpcbmaker.models.schematic._Component;
 import com.mvcpcbmaker.models.schematic.Package;
 import com.mvcpcbmaker.models.schematic.Part;
 import com.mvcpcbmaker.models.schematic.Net;
-import com.mvcpcbmaker.models.schematic._ComponentImpl.ComponentPackage;
 
 
 
@@ -32,16 +28,12 @@ public class SchematicImpl implements Schematic{
 	private String strArray[] = {"AGND","VCC","AVCC","VDD","VSS","+3V3A","+5V","GND"};
 	private Set<String> devicesetExcludeList;
 
-	//signal_exclude_list = ["AGND","VCC","AVCC","VDD","VSS","+3V3A","VMID"]
-	//parent_part_type_list = ["IC","T"]
-	//child_part_library_list = ["rcl","SMT_R_array","jumper"]
 	private Map<String,Package> packageMap;
 	private Map<String,_Component> componentMap;
 	private Map<String,Part> partMap;
 	private Map<String,Net> netMap;
 
 	private List<Map<String,Object>> packageTableData;
-	//private List<Map<String,ComponentPackage>> componentTableData;
 	private List<Map<String,Object>> partTableData;
 	private List<Map<String,Object>> netTableData;
 	private Document schDoc;
@@ -80,7 +72,7 @@ public class SchematicImpl implements Schematic{
 				pkg.setPinMap();
 				pkg.setSize();
 				this.packageMap.put(name,pkg);
-				
+
 				Package temp = this.packageMap.get(name);
 				Map<String,Object> tempMap = temp.getPackageData();
 				this.packageTableData.add(tempMap);
@@ -151,19 +143,17 @@ public class SchematicImpl implements Schematic{
 	@Override
 	public void cleanOutObjectData()
 	{
-		this.packageMap = null;//new HashMap<>();
-		this.componentMap = null;//new HashMap<>();
-		this.partMap = null;//new HashMap<>();
-		this.netMap = null;//new HashMap<>();
+		this.packageMap = null;
+		this.componentMap = null;
+		this.partMap = null;
+		this.netMap = null;
 
 
-		 this.packageTableData = null;//new ArrayList<>() ;
-		 this.partTableData = null;//new ArrayList<>() ;
-		 this.netTableData = null;//new ArrayList<>() ;
+		 this.packageTableData = null;
+		 this.partTableData = null;
+		 this.netTableData = null;
 
-		this.schDoc = null;//new Document("");
-		//System.gc();
-
+		this.schDoc = null;
 
 	}
 

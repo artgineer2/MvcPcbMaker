@@ -2,7 +2,6 @@ package com.mvcpcbmaker.models.board;
 
 import javax.json.JsonObject;
 
-import com.mvcpcbmaker.utilstructs.CenterPoint;
 import com.mvcpcbmaker.utilstructs.BlockUnits;
 
 public interface Part {
@@ -18,7 +17,7 @@ public interface Part {
 	BlockUnits getSize();
 	int getHeight();
 	int getWidth();
-	
+
 	void setPartCenterX(int centerX);
 	void setPartCenterY(int centerY);
 	int getPartCenterX();

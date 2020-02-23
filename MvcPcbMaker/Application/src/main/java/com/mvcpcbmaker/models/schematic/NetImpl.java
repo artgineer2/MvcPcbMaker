@@ -10,21 +10,16 @@ import java.util.Set;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.stereotype.Component;
 import com.mvcpcbmaker.models.schematic.Net;
 import com.mvcpcbmaker.models.schematic.Part;
-/*import com.mvcpcbmaker.models.schematic
-import com.mvcpcbmaker.models.schematic
-import com.mvcpcbmaker.models.schematic
-import com.mvcpcbmaker.models.schematic
-import com.mvcpcbmaker.models.schematic*/
+
 
 
 public class NetImpl implements Net {
 
 	private String strArray[] = {"VCC","VDD","VSS","5V","12V","18V","15V","24V","GND",
 			"0V","V+","V-","+3V","+1V","+2V","P+"};
-	private Set<String> devicesetExcludeList = new HashSet<String>(Arrays.asList(strArray)); 
+	private Set<String> devicesetExcludeList = new HashSet<String>(Arrays.asList(strArray));
 
 	private class NetPart
 	{
@@ -32,31 +27,27 @@ public class NetImpl implements Net {
 		double x;
 		double y;
 	}
-	
+
 	private Map<String,NetPart> connectedParts;
 	private String name;
-	
-	
+
+
 	public NetImpl(String name, Element netBlock, Map<String,Part> partMap)
 	{
 		this.connectedParts = new HashMap<String,NetPart>();
 		this.name = name;
 	 	Elements pinrefBlockList = netBlock.getElementsByTag("pinref");
-	 	//System.out.println(netBlock.toString());
 	 	for(Element pinrefBlock: pinrefBlockList)
 	 	{
-	 		
+
 	 		NetPart part = new NetPart();
 	 		boolean pass = false;
-	 		boolean netNamePass = false;
-	 		boolean partNamePass = false;
 	 		String partString = pinrefBlock.attr("part");
-	 		//System.out.print("\n"+partString+"::");
 	 		for(String excludeString : devicesetExcludeList)
 	 		{
 	 			if(partString.indexOf(excludeString) >= 0)
 				{
-					pass = true; 
+					pass = true;
 					break;
 				}
 	 		}
@@ -65,15 +56,13 @@ public class NetImpl implements Net {
 	 		{
 	 			if(this.name.indexOf(excludeString) >= 0)
 				{
-					pass = true; 
+					pass = true;
 					break;
 				}
 	 		}
 	 		if(pass == true) continue;
-	 	 	//System.out.println(pinrefBlock.attr("part").toString()); 	  
 	 	 	  Part partObject = partMap.get(pinrefBlock.attr("part"));
-	 	 	 //System.out.println(this.name+": "+pinrefBlock.toString());
-	 	 	  
+
 	 	 	  if(pinrefBlock.attr("gate").compareTo("G$1") == 0)
 	 	 	  {
 	 	 		part.pinName = pinrefBlock.attr("pin");
@@ -82,16 +71,15 @@ public class NetImpl implements Net {
 	 	 	  {
 	 	 		part.pinName = pinrefBlock.attr("gate") + '.' + pinrefBlock.attr("pin");
 	 	 	  }
-	 	 	 	  
+
 	 	 	  Map<String,Double> partCoords = partObject.getPinNameCoords(part.pinName);
 	 	 	  part.x = partCoords.get("x");
 	 	 	  part.y = partCoords.get("y");
-	 	 	  //System.out.println(pinrefBlock.attr("part")+"::"+this.name +":"+part.pinName+":"+ part.x+","+part.y);
 	 	 	  this.connectedParts.put(pinrefBlock.attr("part"), part);
 
 	 	}
 	}
-	
+
  	public List<Map<String,Object>> getNetData()
  	{
  		List<Map<String,Object>> netData = new ArrayList<Map<String,Object>>();
@@ -105,8 +93,8 @@ public class NetImpl implements Net {
  			netPart.put("y",this.connectedParts.get(partName).y);
  			netData.add(netPart);
  		}
-		
-		
+
+
 		return netData;
  	}
 
