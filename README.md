@@ -1,4 +1,4 @@
-# MvcPcbMaker
+# MvcPcbMaker (NOTE: This is no longer running on AWS)
 
 ## Background
 
